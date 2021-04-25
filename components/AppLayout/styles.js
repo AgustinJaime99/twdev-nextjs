@@ -5,9 +5,7 @@ import {breakpoints, colors, fonts} from '../../styles/theme'
 export const globalStyles = css.global`
   html,
   body {
-    background-image:
-      radial-gradient(${colors.secondary} 1px, #fdfdfd 1px),
-      radial-gradient(#000000 1px, #fdfdfd 1px);
+    background-color: ${colors.background};
     background-position: 0 0, 25px 25px;
     background-size: 50px 50px;
     padding: 0;
@@ -28,7 +26,7 @@ export default css`
   main {
     background: #fff;
     border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, .1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .6);
     height: 100%;
     width: 100%;
   }

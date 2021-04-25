@@ -10,5 +10,6 @@ export const breakpoints = {
     grey: '#2e2e2e',
     white: '#ffffff',
     primary: '#000000',
-    secondary: '#00ffd5'
+    secondary: '#8c7def',
+    background: '#3a3a3a'
   }

@@ -2,6 +2,9 @@ import Head from 'next/head'
 import Link from 'next/link'
 import {useRouter} from 'next/router'
 import AppLayout from '../components/AppLayout'
+import Fade from 'react-reveal/Fade';
+import Zoom from 'react-reveal/Zoom';
+import { colors } from '../styles/theme';
 // devit
 
 export default function Home() {
@@ -15,38 +18,46 @@ export default function Home() {
       </Head>
 
       <AppLayout>
-        <h1>
-          <a href="https://nextjs.org">devter</a>
-        </h1>
-        <nav>
-          <Link href='/timeline'>
-            <a>
-              timeline
-            </a>
-          </Link>
-        </nav>
+        <section>
+          <Zoom cascade duration={500} delay={600}>
+          <h1>
+            Twe-dev
+          </h1>
+          <h2>
+            Talk about development !
+          </h2>
+          </Zoom>
+        <Fade duration={2500} delay={600}>
+          <img src= '/twdev.png' alt='Logo'/>
+        </Fade>
+        </section>
+        
       </AppLayout>
 
       <style jsx>{`
+        section {
+          display: grid;
+          height: 100%;
+          place-content: center;
+          place-items:center;
+        }
+
+        img {
+          width: 250px;
+        }
+
         h1 {
-          text-align: center;
-          font-size: 48px;
+          color: ${colors.primary};
+          font-weight: 100;
         }
 
-        nav {
+        h2{
+          color: ${colors.secondary};
           font-size: 24px;
-          text-align: center;
+          font-weight: 100;
+          margin: 0;
         }
 
-        .another-title {
-          color: #333;
-          font-size: 24px;
-        }
-
-        a {
-          color: orange;
-          text-decoration: none;
-        }
       `}</style>
     </>
   )
