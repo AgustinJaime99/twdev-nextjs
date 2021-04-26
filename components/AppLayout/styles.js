@@ -1,6 +1,6 @@
-import css from 'styled-jsx/css'
+import css from "styled-jsx/css"
 
-import {breakpoints, colors, fonts} from '../../styles/theme'
+import { breakpoints, colors, fonts } from "../../styles/theme"
 
 export const globalStyles = css.global`
   html,
@@ -10,7 +10,7 @@ export const globalStyles = css.global`
     background-size: 50px 50px;
     padding: 0;
     margin: 0;
-    font-family: ${fonts.base}
+    font-family: ${fonts.base};
   }
   * {
     box-sizing: border-box;
@@ -26,7 +26,7 @@ export default css`
   main {
     background: #fff;
     border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, .6);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
     height: 100%;
     width: 100%;
   }
@@ -35,4 +35,5 @@ export default css`
       height: 90vh;
       width: ${breakpoints.mobile};
     }
-  }`
+  }
+`
