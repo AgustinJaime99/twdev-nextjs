@@ -5,11 +5,15 @@ import Zoom from 'react-reveal/Zoom';
 import { colors } from '../styles/theme';
 import Button from '../components/Button';
 import GitHub from '../components/Icons/GitHub';
-import { logWithGithub, logOut } from '../firebase/client';
-import { useState } from 'react';
+import { logWithGithub, logOut, onAuthStateChanged } from '../firebase/client';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(undefined);
+
+  useEffect(() => {
+    onAuthStateChanged(setUser)
+  }, [])
 
   const handleLogOut = () => {
     logOut();
@@ -58,21 +62,23 @@ export default function Home() {
         }
 
           <div>
-            {user === null ? 
-            (
+            {user === null &&
+            
               <Fade duration={2500} delay={600}>
               <Button onClick={handleClick}><GitHub fill='#ffff' />Login with GitHub</Button>
               </Fade>
-            ) 
-            : 
-            (
+            
+          }
+            {
+              user && user.avatar &&
+              
               <section>
               <img className='avatar' src={user.avatar} />
               <h1>{user.username}</h1>
-              <h2 className='url'>{user.url}</h2>
+              <h2 className='url'>{user.email}</h2>
               <Button onClick={handleLogOut}>Log out</Button>
               </section>
-            )
+            
             }
           </div>
         </section>

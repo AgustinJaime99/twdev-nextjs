@@ -29,19 +29,17 @@ const firebaseConfig = {
     .onAuthStateChanged(user => {
       const normalizedUser = 
       mapUserFromFirebaseAuth(user);
-      onChange(normalizedUser )
+      onChange(normalizedUser)
     })
     
   }
 
   const mapUserFromFirebaseAuth = (user) => {
-    const { additionalUserInfo } = user
-    const { username, profile } = additionalUserInfo
-    const { avatar_url, blog } = profile
+    const { email, photoURL, displayName } = user
         
     return {
-          avatar: avatar_url,
-          username,
-          url:blog
+          avatar: photoURL,
+          username:displayName,
+          email
         }
   }
