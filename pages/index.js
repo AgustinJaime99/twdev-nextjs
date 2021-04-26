@@ -1,14 +1,30 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import {useRouter} from 'next/router'
 import AppLayout from '../components/AppLayout'
 import Fade from 'react-reveal/Fade';
 import Zoom from 'react-reveal/Zoom';
 import { colors } from '../styles/theme';
-// devit
+import Button from '../components/Button';
+import GitHub from '../components/Icons/GitHub';
+import { logWithGithub, logOut } from '../firebase/client';
+import { useState } from 'react';
 
 export default function Home() {
-  const router = useRouter()
+  const [user, setUser] = useState(null);
+
+  const handleLogOut = () => {
+    logOut();
+    setUser(null);
+  }
+
+  const handleClick = () => {
+    logWithGithub().then(user => {
+      const { avatar, username, url } = user
+      setUser(user)
+      console.log(user)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
 
   return (
     <>
@@ -19,7 +35,10 @@ export default function Home() {
 
       <AppLayout>
         <section>
-          <Zoom cascade duration={500} delay={600}>
+         {user === null ? 
+         ( 
+           <>
+         <Zoom cascade duration={500} delay={600}>
           <h1>
             Twe-dev
           </h1>
@@ -30,11 +49,47 @@ export default function Home() {
         <Fade duration={2500} delay={600}>
           <img src= '/twdev.png' alt='Logo'/>
         </Fade>
+        </>
+        )
+        :
+        (
+          null
+        )
+        }
+
+          <div>
+            {user === null ? 
+            (
+              <Fade duration={2500} delay={600}>
+              <Button onClick={handleClick}><GitHub fill='#ffff' />Login with GitHub</Button>
+              </Fade>
+            ) 
+            : 
+            (
+              <section>
+              <img className='avatar' src={user.avatar} />
+              <h1>{user.username}</h1>
+              <h2 className='url'>{user.url}</h2>
+              <Button onClick={handleLogOut}>Log out</Button>
+              </section>
+            )
+            }
+          </div>
         </section>
         
       </AppLayout>
 
       <style jsx>{`
+
+        .url {
+          margin-bottom: 15px;
+        }
+
+        .avatar {
+          width:250px;
+          border-radius:900px
+        }
+
         section {
           display: grid;
           height: 100%;
@@ -57,6 +112,7 @@ export default function Home() {
           font-weight: 100;
           margin: 0;
         }
+
 
       `}</style>
     </>
