@@ -1,44 +1,68 @@
-import AppLayout from "../../components/AppLayout"
+import { useEffect, useState } from "react"
+import Tw from "../../components/Tw"
+import useUser from "../../hooks/useUser"
+import { listenLatestTws } from "../../firebase/client"
+
+import Head from 'next/head'
+import Nav from '../../components/Nav'
+import NavHead from "../../components/NavHead"
 
 export default function HomePage() {
+  const [tws, setTws] = useState([])
+
+  const user = useUser()
+
+
+  useEffect(() => {
+    let unsuscribe
+
+    if (user) {
+      unsuscribe = listenLatestTws(newTws => {
+        setTws(newTws)
+      })
+    }
+    return () => unsuscribe && unsuscribe()
+  }, [user])
+
+  console.log(user)
+
   return (
     <>
-      <AppLayout>
-        <header>
-          <h2>Home</h2>
-        </header>
-        <section></section>
-        <nav></nav>
-      </AppLayout>
+
+      <Head>
+        <title>Home / Tw-dev</title>
+      </Head>
+      <NavHead tittle={"Home"} />
+
+      <section>
+        {tws.map(({ id, img, userName, avatar, content, userId, createdAt }) => {
+          return (
+            <Tw
+              key={id}
+              userName={userName}
+              avatar={avatar}
+              content={content}
+              id={id}
+              img={img}
+              userId={userId}
+              createdAt={createdAt}
+            />
+          )
+        })}
+      </section>
+      <Nav></Nav>
+
+
       <style jsx>
         {`
-          header {
-            border-bottom: 1px solid;
-            height: 49px;
-            display: flex;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            width: 100%;
-          }
-
           section {
-            padding-top: 100px;
+            flex: 1;
           }
 
-          h2 {
-            font-size: 20px;
-            font-weight: 700;
-          }
+          article {
+            padding: 10px 15px;
 
-          nav {
-            bottom: 0;
-            border-top: 1px solid;
-            height: 49px;
-            width: 100%;
-            position: fixed;
-            display: flex;
-          }
+          }          
         `}
       </style>
     </>

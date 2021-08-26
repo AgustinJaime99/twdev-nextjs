@@ -12,6 +12,8 @@ const firebaseConfig = {
 
 !firebase.apps.length && firebase.initializeApp(firebaseConfig)
 
+const db = firebase.firestore()
+
 export const logWithGithub = () => {
   const githubProvider = new firebase.auth.GithubAuthProvider()
   return firebase
@@ -33,11 +35,83 @@ export const onAuthStateChanged = (onChange) => {
 }
 
 const mapUserFromFirebaseAuth = (user) => {
-  const { email, photoURL, displayName } = user
+  const { email, photoURL, displayName, uid } = user
 
   return {
     avatar: photoURL,
     username: displayName,
     email,
+    uid
   }
+}
+
+export const addTw = ({ avatar, content, userId, userName, img }) => {
+  return db.collection('tws').add({
+    avatar,
+    content,
+    userId,
+    userName,
+    img,
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+    likesCount: 0,
+    sharedCount: 0
+  })
+}
+
+export const mapTwFromFirebaseToTwObject = doc => {
+  const data = doc.data()
+  const id = doc.id
+  const { createdAt } = data
+
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate()
+  }
+}
+
+// escuchar actualizaciones en la base de datos
+
+export const listenLatestTws = (cb) => {
+  return db
+    .collection('tws')
+    .orderBy('createdAt', 'desc')
+    .limit(20)
+    .onSnapshot(({ docs }) => {
+      const newTws = docs.map(mapTwFromFirebaseToTwObject)
+      cb(newTws)
+    })
+}
+
+// obtener ultimos tweets
+
+export const fetchLatestTws = () => {
+  return db
+    .collection('tws')
+    .orderBy("createdAt", "desc")
+    .get()
+    .then(({ docs }) => {
+      return docs.map(mapTwFromFirebaseToTwObject)
+    })
+}
+
+// obtener tweets de un usuario especifico
+
+export const fetchLatestTwsOfUser = () => {
+  return db
+    .collection('tws')
+    .orderBy('createdAt', 'desc')
+    .get()
+    .then(({ docs }) => {
+      return docs.map((doc) => {
+        const data = doc.data()
+        return data
+      })
+    })
+}
+
+export const uploadImage = (file) => {
+  const ref = firebase.storage().ref(`images/${file.name}`)
+  const task = ref.put(file)
+  return task
 }
